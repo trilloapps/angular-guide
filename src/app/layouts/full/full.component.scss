@@ -1,0 +1,25 @@
+.body{
+    height: calc(100vh);
+    margin-left: 0;
+    z-index: 1;
+    // position: relative;
+    transition: all 0.1s ease;
+    background-color: #ffffff;
+    padding-top: 63px !important;
+    // top: 63px;
+    scroll-behavior: smooth;
+}
+
+.body-trimmed{
+    margin-left: 240px;
+}
+
+.admin-overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.32);
+    z-index: 10;
+}
