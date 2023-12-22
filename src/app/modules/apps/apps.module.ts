@@ -7,6 +7,7 @@ import { CustomersComponent } from './customers/customers.component';
 import { OrdersComponent } from './orders/orders.component';
 import { LineItemsComponent } from './line-items/line-items.component';
 import { ItemDetailsComponent } from './item-details/item-details.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { ItemDetailsComponent } from './item-details/item-details.component';
     ReactiveFormsModule,
     CommonModule,
     RouterModule.forChild(IntroRoutes),
+    NgbModule
   ]
 })
 export class AppsModule { }

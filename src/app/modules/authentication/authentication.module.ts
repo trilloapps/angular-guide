@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthenticationRoutes } from './authentication.routing.module';
 import { LoginComponent } from './login/login.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -16,7 +17,9 @@ import { LoginComponent } from './login/login.component';
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
+    SharedModule,
     RouterModule.forChild(AuthenticationRoutes),
+    
   ]
 })
 export class AuthenticationModule { }
