@@ -1,0 +1,35 @@
+<section>
+    <div routerLink="/app/orders" class="mb-2 text-decoration" style="font-size: 13px;"><i class="fa-solid fa-arrow-turn-down-left me-2"></i> Back to orders</div>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="m-0">Items</h4>
+        <input type="text" class="w-50 form-control" placeholder="Search by Name" (keyup)="searchFilter($event)">
+    </div>
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Code</th>
+            <th scope="col">Weight</th>
+            <th scope="col">Quantity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of items"  (click)="navigateToDetails(item)">
+            <td>
+                <div class="d-flex align-items-center gap-2">
+                    <img height="40" width="40" class="rounded-pill" [src]="item.image" alt="">
+                <span>{{item.name}}</span>
+                </div>
+            </td>
+            <td class="desc-sec">{{item.description}}</td>
+            <td>{{item.code}}</td>
+            <td>{{item.weight}}</td>
+            <td>{{item.quantity}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div *ngIf="items.length == 0" class="text-center">No Data Found!</div>
+</div>
+</section>
