@@ -1,7 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { DataService } from 'src/app/services/data.service';
+import { PageService } from 'src/app/services/page.service';
 
 interface Customers {
   id: string;
+  profilePicture: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -14,34 +18,63 @@ interface Customers {
   templateUrl: './customers.component.html',
   styleUrls: ['./customers.component.scss']
 })
-export class CustomersComponent {
+export class CustomersComponent implements OnInit {
 
-  customersList : Customers[] = [
-    {id:'c-456', firstName:'John', lastName:'Doe', email:'john@gmail.com', phone:+92786546865, address:'Street 1 ,Harley', status:'Active'},
-    {id:'c-451', firstName:'Adam', lastName:'Smith', email:'adam@gmail.com', phone:+92786546865, address:'Street 1 ,Harley', status:'Active'},
-    {id:'c-452', firstName:'Johnson', lastName:'Charles', email:'johnson@gmail.com', phone:+92786546865, address:'Street 1 ,Harley', status:'Active'},
-    {id:'c-453', firstName:'Kane', lastName:'William', email:'kane@gmail.com', phone:+92786546865, address:'Street 1 ,Harley', status:'Active'},
-    {id:'c-455', firstName:'Joe', lastName:'Root', email:'joe@gmail.com', phone:+92786546865, address:'Street 1 ,Harley', status:'Active'},
-    {id:'c-456', firstName:'James', lastName:'Andy', email:'james@gmail.com', phone:+92786546865, address:'Street 1 ,Harley', status:'Inactive'},
-    {id:'c-466', firstName:'Andy', lastName:'Flower', email:'andt@gmail.com', phone:+92786546865, address:'Street 1 ,Harley', status:'Active'},
-    {id:'c-476', firstName:'Greame', lastName:'Smith', email:'greame@gmail.com', phone:+92786546865, address:'Street 1 ,Harley', status:'Active'},
-    {id:'c-446', firstName:'David', lastName:'Warner', email:'marnus@gmail.com', phone:+92786546865, address:'Street 1 ,Harley', status:'Active'},
-    {id:'c-356', firstName:'Marnus', lastName:'Labuchange', email:'john@gmail.com', phone:+92786546865, address:'Street 1 ,Harley', status:'Active'},
-    {id:'c-256', firstName:'Mith', lastName:'Starc', email:'starc@gmail.com', phone:+92786546865, address:'Street 1 ,Harley', status:'Active'},
-    {id:'c-156', firstName:'Kane', lastName:'Richarson', email:'john@gmail.com', phone:+92786546865, address:'Street 1 ,Harley', status:'Active'},
-    {id:'c-466', firstName:'Morne', lastName:'Morkel', email:'john@gmail.com', phone:+92786546865, address:'Street 1 ,Harley', status:'Inactive'},
-  ]
+  customersList: Customers[] = []
+  temp: Customers[] = []
   searchInput: any;
-  temp: Customers[]=[...this.customersList];
+  searchControl: FormControl = new FormControl("");
+  size = 10
+  start = 1;
+  page = 1;
+  pageSize = 10;
+  totalSize: number;
+
+  constructor(private dataService: DataService, private pageService: PageService) { }
+
+  ngOnInit(): void {
+    this.getCustomerList(this.start, this.size);
+  }
+
+
+  getCustomerList(incommingStart, incommingSize) {
+    let body = {
+      start: incommingStart,
+      size: incommingSize
+
+    }
+    this.dataService.GetCustomerList(body).subscribe({
+      next: (result: any) => {
+        if (result.status === "success") {
+          this.customersList = result.data.customers;
+          this.totalSize = result.data.totalData;
+          this.temp = [...this.customersList]
+        }
+      },
+      error: (error) => {
+        console.error(error);
+
+      },
+      complete: () => { },
+    });
+
+  }
+
 
   searchFilter(event: any) {
-    this.searchInput=event.target.value
+    this.searchInput = event.target.value
     const val = event.target.value.toLowerCase();
     // filter our data
-    const temp = this.temp.filter(function (d:any) {
+    const temp = this.temp.filter(function (d: any) {
       return d.firstName.toLowerCase().indexOf(val) !== -1 || !val;
     });
     this.customersList = temp;
+
+  }
+  getPaginationFromServer(oIncomingEvent: any) {
+    let incommingPage = oIncomingEvent;
+    let start = (incommingPage - 1) * this.size + 1;
+    this.getCustomerList(start, this.size);
 
   }
 

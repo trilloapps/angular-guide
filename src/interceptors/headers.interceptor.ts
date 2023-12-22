@@ -13,15 +13,16 @@ export class HeadersInterceptor implements HttpInterceptor {
     {
       'Accept':'*/*',
       'x-app-name':'main',
+      'x-org-name':'cloud',
       'content-type':'application/json',
-      // 'Authorization':'Bearer ' + this.oSessionService.SessionService_GetAccessToken(),
+      'Authorization':'Bearer ' + localStorage.getItem('lsSampleAppAccessToken'),
     }
     if((request.url.includes('ajaxLogin')))
        {
          this.oRequestWithHeaders  = request.clone({ setHeaders: {
           'Accept':'*/*',
-          'x-app-name':'filesharing',
-          // 'x-org-name': environment.OrgName,
+          'x-app-name':'main',
+          'x-org-name': 'cloud',
           'content-type':'application/json',
          } });
        }

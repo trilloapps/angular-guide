@@ -4,11 +4,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HeaderComponent } from './header/header.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
+import { AlertComponent } from './alert/alert.component';
 
 
 @NgModule({
   declarations: [
-    HeaderComponent
+    HeaderComponent,
+    AlertComponent
   ],
   imports: [
     FormsModule,
@@ -17,6 +19,6 @@ import { RouterModule } from '@angular/router';
     NgbModule,
     RouterModule
   ],
-  exports:[ HeaderComponent ]
+  exports:[ HeaderComponent,AlertComponent ]
 })
 export class SharedModule { }

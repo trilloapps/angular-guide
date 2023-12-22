@@ -4,8 +4,8 @@
         <div ngbDropdown class="d-inline-block">
             <i ngbDropdownToggle class="fa-light fa-circle-user cursor-pointer fa-2xl"></i>
             <div class="dropdown" ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                <button ngbDropdownItem><i class="fa-light fa-user"></i> Zeeshan Ahmad</button>
-                <button ngbDropdownItem routerLink="/auth/login"><i class="fa-regular fa-right-from-bracket"></i> Logout</button>
+                <button ngbDropdownItem><i class="fa-light fa-user"></i> {{userDetails?.firstName}}</button>
+                <button ngbDropdownItem (click)="logout()"><i class="fa-regular fa-right-from-bracket"></i> Logout</button>
             </div>
         </div>
     </div>

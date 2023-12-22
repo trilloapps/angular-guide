@@ -7,7 +7,7 @@ import { FullComponent } from './layouts/full/full.component';
 import { BlankComponent } from './layouts/blank/blank.component';
 import { SharedModule } from './shared/shared.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { HeadersInterceptor } from 'src/interceptors/headers.interceptor';
 
 @NgModule({
@@ -20,7 +20,8 @@ import { HeadersInterceptor } from 'src/interceptors/headers.interceptor';
     BrowserModule,
     AppRoutingModule,
     SharedModule,
-    NgbModule
+    NgbModule,
+    HttpClientModule,
   ],
   providers: [
     {

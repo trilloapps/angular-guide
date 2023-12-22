@@ -1,0 +1,7 @@
+<div class="alert-position shadow">
+    <div class="custom-alert border-0 d-flex align-items-center {{resMessage.color}}-alert">
+      <div class="alert-body mr-3 d-flex p-2 align-items-center"> 
+        <span [ngClass]="resMessage.responseType === 'success'?'check-circle':'error-icon'"></span>
+        {{resMessage.message}}</div>
+    </div>
+  </div>
