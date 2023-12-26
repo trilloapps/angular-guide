@@ -1,5 +1,5 @@
 <section>
-    <div routerLink="/app/line-items" class="mb-2 text-decoration" style="font-size: 13px;"><i
+    <div (click)="backtoitems()" class="mb-2 text-decoration" style="font-size: 13px;"><i
             class="fa-solid fa-arrow-turn-down-left me-2"></i> Back to items</div>
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="m-0">Item</h4>
@@ -10,43 +10,67 @@
         <div class="col-lg-7">
             <div class="border details rounded">
                 <figure>
-                    <img src="https://currenwatches.com.pk/cdn/shop/products/wefew.jpg?v=1699506412" height="500"
+                    <img [src]="items?.picture" alt="" height="500"
                         alt="">
                 </figure>
             </div>
         </div>
         <div class="col-lg-5">
             <div class="border-bottom mb-3"> 
-                <h4>Watch</h4>
+                <h4>{{items?.itemName}}</h4>
                 <p>
-                    A watch is a timekeeping device typically worn on the wrist or carried in a pocket. It is designed
-                    to measure and display the passage of time. Watches come in various styles, ranging from simple and
-                    functional to elaborate and fashionable.
-
-                    The basic components of a traditional wristwatch include a timekeeping mechanism, usually a movement
-                    or quartz crystal, which powers the hands that indicate the hours, minutes, and sometimes seconds.
-                    The watch may also feature additional complications such as date displays, chronographs (stopwatch
-                    functions), and other specialized features.
-
-                    Watches can be powered by mechanical movements, where the energy is derived from winding the watch
-                    manually or automatically through the motion of the wearer's wrist. Alternatively, quartz watches
-                    use a battery to power the movement.
+                    {{items?.itemDescription}}
                 </p>
             </div>
 
             <div>
-                 <p> <strong>Code:</strong> cs-45468</p>
-                 <p> <strong>Weight:</strong> 50g</p>
-                 <p> <strong>Price:</strong> 50$</p>
-                 <p> <strong>Quantity:</strong> 4            </p>
+                 <p> <strong>Code:</strong> {{items?.itemCode}}</p>
+                 <p> <strong>Weight:</strong> {{items?.weight}}</p>
+                 <!-- <p> <strong>Price:</strong> {{items.price}}</p> -->
+                 <p> <strong>Quantity:</strong>{{items?.quantity}}</p>
             </div>
         </div>
     </div>
 </section>
-
-
-
+<!-- Use *ngIf to check if items is defined before rendering the form -->
 <ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Edit</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <form *ngIf="items">
+        <div class="form-group mb-3">
+          <label for="" class="form-label">Code</label>
+          <input type="text" class="form-control" value="{{ items?.itemCode }}" disabled>
+        </div>
+  
+        <div class="form-group mb-3">
+          <label for="" class="form-label">Weight</label>
+          <input type="text" class="form-control" value="{{ items?.weight }}" disabled>
+        </div>
+  
+        <!-- <div class="form-group mb-3">
+          <label for="" class="form-label">Price</label>
+          <input type="text" class="form-control" value="{{ items.price }}" disabled>
+        </div> -->
+  
+        <div class="form-group mb-3">
+          <label for="" class="form-label">Quantity</label>
+          <input type="number" class="form-control" value="{{items?.quantity}}" min="0" (change)="getQuantityValue($event)">
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="modal.close('Cancel click')">Cancel</button>
+      <button type="button" class="btn btn-primary" (click)=" EditItemsList(items)">Save</button>
+    </div>
+  </ng-template>
+  
+  
+
+
+<!-- <ng-template #content let-modal>
 	<div class="modal-header">
 		<h4 class="modal-title" id="modal-basic-title">Edit</h4>
 		<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
@@ -76,8 +100,8 @@
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-outline-secondary" (click)="modal.close('Save click')">Cancel</button>
-		<button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
+		<button type="button" class="btn btn-primary" (click)="EditDetailsList(items)">Save</button>
 	</div>
-</ng-template>
+</ng-template> -->
 
 

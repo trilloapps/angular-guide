@@ -17,16 +17,38 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of orders" routerLink="/app/line-items">
+          <tr *ngFor="let item of orders" (click)="navigatetoitem(item)">
             <td>{{item.orderNo}}</td>
             <td>{{item.title}}</td>
             <td>{{item.description}}</td>
-            <td>{{item.bookingDate | date:'mediumDate'}}</td>
-            <td>{{item.deliveryTime}}</td>
-            <td><span class="badge" [ngClass]="getStatusClass(item)">{{item.status}}</span> </td>
+            <td>{{item.bookingDateTime | date:'medium'}}</td>
+            <td>{{item.deliverDateTime | date:'medium'}}</td>
+            <td>
+              <span class="badge" [ngClass]="{
+                'text-bg-success': item.status === 'Delivered',
+                'text-bg-danger': item.status === 'Cancel',
+                'text-bg-warning': item.status === 'Shipped',
+                'text-bg-secondary': !(item.status === 'Delivered' || item.status === 'Cancel' || item.status === 'In Transit')
+              }">
+                {{ item.status | titlecase }}
+              </span>
+            </td>
+            
+            
           </tr>
         </tbody>
       </table>
       <div *ngIf="orders.length == 0" class="text-center">No Data Found!</div>
+      <div *ngIf="orders.length > 0" class="justify-content-end d-flex">
+      <ngb-pagination [maxSize]="5" [(page)]="page" (pageChange)="getPaginationFromServer($event)" [pageSize]="pageSize"
+      [collectionSize]="totalSize">
+      <ng-template ngbPaginationPrevious>
+        <i class="fa-solid fa-chevron-left"></i>
+      </ng-template>
+      <ng-template ngbPaginationNext>
+        <i class="fa-solid fa-chevron-right"></i>
+      </ng-template>
+    </ngb-pagination>
+     </div>
 </div>
 </section>

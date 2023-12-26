@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 import { DataService } from 'src/app/services/data.service';
 import { PageService } from 'src/app/services/page.service';
 
@@ -30,7 +31,7 @@ export class CustomersComponent implements OnInit {
   pageSize = 10;
   totalSize: number;
 
-  constructor(private dataService: DataService, private pageService: PageService) { }
+  constructor(private dataService: DataService, private router :Router) { }
 
   ngOnInit(): void {
     this.getCustomerList(this.start, this.size);
@@ -76,6 +77,11 @@ export class CustomersComponent implements OnInit {
     let start = (incommingPage - 1) * this.size + 1;
     this.getCustomerList(start, this.size);
 
+  }
+  navigatetooder(item){
+    this.router.navigate(['/app/orders'],  {
+      queryParams: { customerId: item.id },
+    });
   }
 
 }

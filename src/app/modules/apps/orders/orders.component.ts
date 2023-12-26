@@ -1,11 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { DataService } from 'src/app/services/data.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 interface Orders {
   orderNo: string;
   title: string;
   description: string;
-  bookingDate: any;
-  deliveryTime: string;
+  bookingDateTime: any;
+  deliverDateTime: string;
   status: string;
 }
 @Component({
@@ -13,20 +15,44 @@ interface Orders {
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.scss']
 })
-export class OrdersComponent {
-
-  orders : Orders[] = [
-    {orderNo: 'o-456', title: 'Smartphone', description: 'High-end mobile device', bookingDate: this.getRandomDate(), deliveryTime: '2 days', status: 'Pending'},
-    {orderNo: 'o-457', title: 'Laptop', description: 'Powerful laptop for productivity', bookingDate: this.getRandomDate(), deliveryTime: '4 days', status: 'Delivered'},
-    {orderNo: 'o-458', title: 'Smartwatch', description: 'Fitness and health tracking', bookingDate: this.getRandomDate(), deliveryTime: '1 day', status: 'Pending'},
-    {orderNo: 'o-459', title: 'Headphones', description: 'Premium audio experience', bookingDate: this.getRandomDate(), deliveryTime: '3 days', status: 'In Transit'},
-    {orderNo: 'o-460', title: 'Camera', description: 'High-resolution digital camera', bookingDate: this.getRandomDate(), deliveryTime: '5 days', status: 'Cancel'},
-    {orderNo: 'o-461', title: 'Tablet', description: 'Portable computing device', bookingDate: this.getRandomDate(), deliveryTime: '2 days', status: 'In Transit'},
-    {orderNo: 'o-462', title: 'Smart Speaker', description: 'Voice-controlled home assistant', bookingDate: this.getRandomDate(), deliveryTime: '3 days', status: 'In Transit'}
-  ]
+export class OrdersComponent implements OnInit {
+  orders : Orders[] = []
   searchInput: any;
+  size = 10
+  start = 1;
+  totalSize: number;
+  page = 1;
+  pageSize = 10;
   temp: Orders[] = [...this.orders];
+  customerId: any;
+  constructor(private dataService: DataService, private route: ActivatedRoute,private router :Router ) { }
+  ngOnInit(): void {
+    this.customerId = this.route.snapshot.queryParams['customerId'];
+     if(this.customerId) this.GetOderLists(this.start, this.size, this.customerId);
+  }
+  GetOderLists(start: number, size: number, customerId: string) {
+    let body = {
+      customerId: customerId,
+      start: 1,
+      size: 20000,
+    }
+    this.dataService.GetOderList(body).subscribe({
+      next: (result: any) => {
+        console.log("error")
+        if (result.status === "success") {
+          this.orders = result.data.orders;
+          this.totalSize = result.data.totalData;
+          this.temp = [...this.orders]
+        }
 
+    },
+    error: (error) => {
+      console.error(" ERROR ==> ", error);
+    },
+    complete: () => { },
+    }
+  )
+  }
   getStatusClass(item: any): string {
     switch (item.status) {
       case 'Delivered':
@@ -55,5 +81,23 @@ export class OrdersComponent {
     const randomDaysAgo = Math.floor(Math.random() * 30); // Adjust the range as needed
     currentDate.setDate(currentDate.getDate() - randomDaysAgo);
     return currentDate.getTime();
+}
+// getPaginationFromServer(oIncomingEvent: any) {
+//   let incommingPage = oIncomingEvent;
+//   let start = (incommingPage - 1) * this.size + 1;
+//   this.GetOderLists(start, this.size, this.customerId);
+
+// }
+
+navigatetoitem(item){
+  this.router.navigate(['/app/line-items'],  {
+    queryParams: { orderId: item.id , customerId: this.customerId},
+  });
+}
+getPaginationFromServer(oIncomingEvent: any) {
+  let incommingPage = oIncomingEvent;
+  let start = (incommingPage - 1) * this.size + 1;
+  this.GetOderLists(start, this.size, this.customerId);
+
 }
 }
