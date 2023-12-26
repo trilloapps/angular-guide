@@ -1,0 +1,25 @@
+.separate-width-height{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+.edit-profile-img {
+    width: 25px;
+    height: 25px;
+    color: white;
+    background-color: #4b4a4a;
+    border: 1px solid #fff;
+    position: relative;
+    bottom: 25px;
+    left: 67px;
+    border-radius: 50%;
+}
+.object-fit-cover{
+    object-fit: cover;
+}
+.profile-width-height {
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 50%;
+    border: 1px solid #000;
+}

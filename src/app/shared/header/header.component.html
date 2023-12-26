@@ -2,12 +2,54 @@
     <div class="container-fluid px-4">
         <a class="navbar-brand" href="#">Sample App</a>
         <div ngbDropdown class="d-inline-block">
-            <i ngbDropdownToggle class="fa-light fa-circle-user cursor-pointer fa-2xl"></i>
+            <i ngbDropdownToggle *ngIf="!profileImg" class="fa-light fa-circle-user cursor-pointer fa-2xl"></i>
+            <img *ngIf="profileImg" class="profile-width-height object-fit-cover" [src]="profileImg" />
             <div class="dropdown" ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                <button ngbDropdownItem><i class="fa-light fa-user"></i> {{userDetails?.firstName}}</button>
+                <button ngbDropdownItem class="border-bottom py-2"><i class="fa-light fa-user"></i> {{userDetails?.firstName}}</button>
+                <button ngbDropdownItem class="border-bottom py-2" (click)="open(content)" ><i  class="fa-solid fa-user"></i> Profile</button>
                 <button ngbDropdownItem (click)="logout()"><i class="fa-regular fa-right-from-bracket"></i> Logout</button>
             </div>
         </div>
     </div>
-
 </nav>
+
+<ng-template #content let-c="close" let-d="dismiss">
+	<div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title">Edit Profile</h4>
+		<button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+	</div>
+	<div class="modal-body">
+    <form [formGroup]="fProfileUpload">
+        <div class="">
+            <div class="d-flex justify-content-center">
+              <div class="profile-avatar">
+                <img *ngIf="!userProfileImage" class="separate-width-height object-fit-cover" [src]="imageUrl"
+                  (error)="loadAvatar()" alt="Profile Picture" />
+                  <img *ngIf="userProfileImage" class="separate-width-height object-fit-cover" 
+                  [src]="userProfileImage" (error)="loadAvatar()" alt="Profile Picture" />
+                <span class="edit-profile-img d-flex align-items-center justify-content-center">
+                  <div class="upload-btn-wrapper">
+                    <input class="d-none" id="uploadfile" accept=".jpeg,.jpg,.png" type="file" name="myfile"
+                      (change)="onFileSelect($event)" />
+                    <label for="uploadfile"><i class="fa-solid fa-pen cursor-pointer"></i></label>
+                  </div>
+                </span>
+              </div>
+            </div>
+          </div>
+		
+            <div class="form-group mb-3">
+                <label class="form-label mb-1">First Name</label>
+                <input type="text" class="form-control" placeholder="First Name" formControlName="firstName">
+            </div>
+            <div class="form-group mb-3">
+                <label class="form-label mb-1">Last Name</label>
+                <input type="text" class="form-control" placeholder="Last Name" formControlName="lastName">
+            </div>
+    </form>
+	</div>
+	<!-- <div class="modal-footer">
+		<button type="button" class="btn btn-outline-dark" (click)="c('Cancel click')">Cancel</button>
+        <button type="button" class="btn btn-primary" >Submit</button>
+	</div> -->
+</ng-template>
