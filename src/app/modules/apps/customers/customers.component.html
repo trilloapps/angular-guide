@@ -4,6 +4,9 @@
       <input type="text" class="w-50 form-control" placeholder="Search by Name" (keyup)="searchFilter($event)">
   </div>
 <div class="table-responsive">
+  <div *ngIf="bLoader">
+    <span></span>
+  </div>
     <table class="table table-striped table-hover">
         <thead>
           <tr>
@@ -15,7 +18,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of customersList" (click)="navigatetooder(item)">
+          <tr *ngFor="let item of customersList" (click)="navigateToOder(item)">
             <td>
               <div class="d-flex align-items-center gap-2">
                   <img height="40" width="40" class="rounded-pill" [src]="item.profilePicture" alt="">
@@ -28,9 +31,9 @@
             <td><span class="badge" [ngClass]="item.status == 'active' ? 'text-bg-success':'text-bg-danger'">{{item.status | titlecase}}</span> </td>
           </tr>
         </tbody>
-      </table>
-      <div *ngIf="customersList.length == 0" class="text-center">No Data Found!</div>
-     <div *ngIf="customersList.length > 0" class="justify-content-end d-flex">
+    </table>
+      <div *ngIf="customersList && customersList?.length == 0 && !bLoader" class="text-center">No Data Found!</div>
+     <div *ngIf="customersList?.length > 0" class="justify-content-end d-flex">
       <ngb-pagination [maxSize]="5" [(page)]="page" (pageChange)="getPaginationFromServer($event)" [pageSize]="pageSize"
       [collectionSize]="totalSize">
       <ng-template ngbPaginationPrevious>

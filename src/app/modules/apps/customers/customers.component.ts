@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DataService } from 'src/app/services/data.service';
-import { PageService } from 'src/app/services/page.service';
 
 interface Customers {
   id: string;
@@ -30,38 +29,40 @@ export class CustomersComponent implements OnInit {
   page = 1;
   pageSize = 10;
   totalSize: number;
+  bLoader: boolean = false;
 
-  constructor(private dataService: DataService, private router :Router) { }
+
+  constructor(private dataService: DataService, private router: Router) { }
 
   ngOnInit(): void {
     this.getCustomerList(this.start, this.size);
   }
 
-
+  //---------- GET CUSTOMERS LIST ----------
   getCustomerList(incommingStart, incommingSize) {
+    this.bLoader = true;
     let body = {
       start: incommingStart,
       size: incommingSize
-
     }
-    this.dataService.GetCustomerList(body).subscribe({
+    this.dataService.GetCustomerLists(body).subscribe({
       next: (result: any) => {
         if (result.status === "success") {
           this.customersList = result.data.customers;
           this.totalSize = result.data.totalData;
           this.temp = [...this.customersList]
+          this.bLoader = false;
         }
       },
       error: (error) => {
         console.error(error);
-
       },
       complete: () => { },
     });
-
   }
 
 
+  //---------- SEARCH FILTER ----------
   searchFilter(event: any) {
     this.searchInput = event.target.value
     const val = event.target.value.toLowerCase();
@@ -70,18 +71,21 @@ export class CustomersComponent implements OnInit {
       return d.firstName.toLowerCase().indexOf(val) !== -1 || !val;
     });
     this.customersList = temp;
-
   }
+
+
+  //---------- PAGINATION ----------
   getPaginationFromServer(oIncomingEvent: any) {
     let incommingPage = oIncomingEvent;
     let start = (incommingPage - 1) * this.size + 1;
     this.getCustomerList(start, this.size);
-
   }
-  navigatetooder(item){
-    this.router.navigate(['/app/orders'],  {
+
+
+  //---------- NAVIGATION ----------
+  navigateToOder(item) {
+    this.router.navigate(['/app/orders'], {
       queryParams: { customerId: item.id },
     });
   }
-
 }

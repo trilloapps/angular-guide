@@ -10,36 +10,42 @@ export class DataService {
   constructor(private http:HttpClient){
 
   }
-  GetCustomerList(body): Observable<any> {
+  // API of CustomerList
+  GetCustomerLists(body): Observable<any> {
     return this.http.post<any>(
       environment.BaseURL + "/ds/function/shared/GetCustomers",
       body
     );
   }
+  // API of OderList
   GetOderList(body): Observable<any> {
     return this.http.post<any>(
       environment.BaseURL + "/ds/function/shared/GetCustomerOrders",
       body
     );
   }
+  //API of ItemList
   GetItemList(body): Observable<any> {
     return this.http.post<any>(
       environment.BaseURL + "/ds/function/shared/GetOrderItems",
       body
     );
   }
+  //API of ItemDetails
   GetItemDetail(body): Observable<any> {
     return this.http.post<any>(
       environment.BaseURL + "/ds/function/shared/GetItemDetails",
       body
     );
   }
+  //API of EditItem
   EditItem(body): Observable<any> {
     return this.http.post<any>(
       environment.BaseURL + "/ds/function/shared/EditLineItem",
       body
     );
   }
+  //API of ProfileUpload
   ProfileFileUpload(body): Observable<any> {
     return this.http.post<any>(
       environment.BaseURL + "/foldersvc/cloudstorage/upload",

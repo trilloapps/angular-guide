@@ -6,7 +6,6 @@ import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class HeadersInterceptor implements HttpInterceptor {
-  // constructor(private oSessionService:cSessionService){}
   oRequestWithHeaders  : any;
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> { 
     let oHeaders = 
@@ -15,7 +14,7 @@ export class HeadersInterceptor implements HttpInterceptor {
       'x-app-name':'main',
       'x-org-name':'cloud',
       'content-type':'application/json',
-      'Authorization':'Bearer ' + localStorage.getItem('lsSampleAppAccessToken'),
+      'Authorization':'Bearer ' + JSON.parse(localStorage.getItem('lsSampleAppAccessToken')),
     }
     if (request.url.includes('/upload')) delete oHeaders['content-type'];
     if((request.url.includes('ajaxLogin')))
@@ -41,7 +40,6 @@ export class HeadersInterceptor implements HttpInterceptor {
       else
       {
         //server side error
-        // errorMessage = `Error Status: ${error.status}\nMessage: ${error.message}`;
         errorMessage = error.error.message
       }
       return throwError(() => new Error(errorMessage))

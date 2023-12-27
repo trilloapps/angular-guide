@@ -18,10 +18,10 @@ export class LoginComponent implements OnInit {
   constructor(private authservice: AuthService, private router: Router) {}
   
   ngOnInit(): void {
-    this.initializeLoginForm()
+    this.initializeLoginForm();
   }
 
-  
+  //---------- INITIALIZE LOGIN FORM ----------
   initializeLoginForm() {
     this.loginForm = new FormGroup({
       j_username: new FormControl(null, [Validators.required,]),
@@ -29,43 +29,42 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  
+
+  //---------- LOGIN REQUEST ----------
   sendLoginRequest() {
     if (this.loginForm.valid) {
       this.bLoader = true;
+  
       this.authservice.AuthService_Login({
         j_username: this.loginForm.value.j_username,
         j_password: this.loginForm.value.j_password,
       }).subscribe({
         next: (result) => {
           if (result.status == 'connected') {
-            localStorage.setItem("lsSampleAppAccessToken", result.accessToken)
-            localStorage.setItem("userDetail", JSON.stringify(result.user))
-
+            localStorage.setItem("lsSampleAppAccessToken", JSON.stringify(result.accessToken));
+            localStorage.setItem("userDetail", JSON.stringify(result.user));
             this.router.navigateByUrl('/app/customers');
           } else {
             console.error("cLoginComponent_SendLoginRequest: Error ===>>", result);
-            this.bLoader = false;
           }
         },
         error: (error) => {
-          {
-            this.bLoader = false;
-            console.error("cLoginComponent_SendLoginRequest: ERROR ===>>", error);
-            this.displayAlertMessage('Bad Credentials!', 'error', 'danger');
-          }
-
+          this.bLoader = false;
+          console.error("cLoginComponent_SendLoginRequest: ERROR ===>>", error);
+          this.displayAlertMessage('Bad Credentials!', 'error', 'danger');
+        },
+        complete: () => {
+          // This block will be executed when the observable is completed
+          this.bLoader = false;
         }
-
-
-
       });
-     
     } else {
       this.loginForm.markAllAsTouched();
     }
-    this.displayAlertMessage
   }
+  
+
+  //---------- ALERT MESSAGES ----------
   displayAlertMessage(sIncommingMessage, sIncommingResponseType, sIncommingColor) {
     this.bDisplayErrorBlock = true
     this.resMessage =
