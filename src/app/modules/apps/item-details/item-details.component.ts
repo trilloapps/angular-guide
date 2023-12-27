@@ -8,59 +8,55 @@ import { DataService } from 'src/app/services/data.service';
   templateUrl: './item-details.component.html',
   styleUrls: ['./item-details.component.scss']
 })
-export class ItemDetailsComponent implements OnInit{
+export class ItemDetailsComponent implements OnInit {
   items: any;
   details: any;
   customerId: any;
   orderId: any;
   quantity: any;
- constructor(private modalService: NgbModal, private dataService: DataService, private route: ActivatedRoute,private router :Router){  
- }
- ngOnInit(): void {
-  this.orderId = this.route.snapshot.queryParams['orderId'];
-  this.customerId = this.route.snapshot.queryParams['customerId'];
-  this.items = this.route.snapshot.queryParams['items'];
-
-  const itemId= this.route.snapshot.queryParams['itemId']
-   if(itemId) this.GetItemListDetails(itemId);
-}
-GetItemListDetails( itemId) {
-  let body = {
-    itemId: itemId,
+  constructor(private modalService: NgbModal, private dataService: DataService, private route: ActivatedRoute, private router: Router) {
   }
-  this.dataService.GetItemDetail(body).subscribe({
-    next: (result: any) => {
-      console.log("error")
-      if (result.status === "success") {
-        this.items = result.data
-      }
-
-  },
-  error: (error) => {
-    console.error(" ERROR ==> ", error);
-  },
-  complete: () => { },
+  ngOnInit(): void {
+    this.orderId = this.route.snapshot.queryParams['itemId'];
+    this.customerId = this.route.snapshot.queryParams['customerId'];
+    this.items = this.route.snapshot.queryParams['items'];
+    const itemId = this.route.snapshot.queryParams['itemId']
+    if (itemId) this.GetItemListDetails(itemId);
   }
-)
-}
-  open(content:any){
-    this.modalService.open(content, {centered:true})
+  GetItemListDetails(itemId) {
+    let body = {
+      itemId: itemId,
+    }
+    this.dataService.GetItemDetail(body).subscribe({
+      next: (result: any) => {
+        if (result.status === "success") {
+          this.items = result.data
+        }
+      },
+      error: (error) => {
+        console.error(" ERROR ==> ", error);
+      },
+      complete: () => { },
+    }
+    )
+  }
+  open(content: any) {
+    this.modalService.open(content, { centered: true })
   }
   backtoitems() {
+
     this.router.navigate(['/app/line-items'], {
       queryParams: {
         orderId: this.orderId,
         customerId: this.customerId,
-       
       }
     });
   }
   EditItemsList(item) {
     let body = {
       lineItemId: item.id.toString(),
-      quantity: this.quantity, 
+      quantity: this.quantity,
     };
-  
     this.dataService.EditItem(body).subscribe({
       next: (result: any) => {
         console.log("Result: ", result);
@@ -78,15 +74,11 @@ GetItemListDetails( itemId) {
       error: (error) => {
         console.error("ERROR: ", error);
       },
-      complete: () => {},
+      complete: () => { },
     });
   }
-
-  getQuantityValue(e)
-  {
+  getQuantityValue(e) {
     this.quantity = e.target.value
     console.log(this.quantity);
-    
   }
-  
 }

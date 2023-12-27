@@ -24,17 +24,10 @@
             <td>{{item.bookingDateTime | date:'medium'}}</td>
             <td>{{item.deliverDateTime | date:'medium'}}</td>
             <td>
-              <span class="badge" [ngClass]="{
-                'text-bg-success': item.status === 'Delivered',
-                'text-bg-danger': item.status === 'Cancel',
-                'text-bg-warning': item.status === 'Shipped',
-                'text-bg-secondary': !(item.status === 'Delivered' || item.status === 'Cancel' || item.status === 'In Transit')
-              }">
+              <span class="badge" [ngClass]="getStatusClass(item)">
                 {{ item.status | titlecase }}
-              </span>
+              </span>              
             </td>
-            
-            
           </tr>
         </tbody>
       </table>

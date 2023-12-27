@@ -44,7 +44,6 @@ export class OrdersComponent implements OnInit {
           this.totalSize = result.data.totalData;
           this.temp = [...this.orders]
         }
-
     },
     error: (error) => {
       console.error(" ERROR ==> ", error);
@@ -55,7 +54,7 @@ export class OrdersComponent implements OnInit {
   }
   getStatusClass(item: any): string {
     switch (item.status) {
-      case 'Delivered':
+      case 'processing':
         return 'text-bg-success';
       case 'Cancel':
         return 'text-bg-danger';
@@ -65,7 +64,6 @@ export class OrdersComponent implements OnInit {
         return 'text-bg-secondary';
     }
   }
-
   searchFilter(event: any) {
     this.searchInput=event.target.value
     const val = event.target.value.toLowerCase();
@@ -74,7 +72,6 @@ export class OrdersComponent implements OnInit {
       return d.title.toLowerCase().indexOf(val) !== -1 || !val;
     });
     this.orders = temp;
-
   }
   getRandomDate() {
     const currentDate = new Date();
@@ -82,13 +79,6 @@ export class OrdersComponent implements OnInit {
     currentDate.setDate(currentDate.getDate() - randomDaysAgo);
     return currentDate.getTime();
 }
-// getPaginationFromServer(oIncomingEvent: any) {
-//   let incommingPage = oIncomingEvent;
-//   let start = (incommingPage - 1) * this.size + 1;
-//   this.GetOderLists(start, this.size, this.customerId);
-
-// }
-
 navigatetoitem(item){
   this.router.navigate(['/app/line-items'],  {
     queryParams: { orderId: item.id , customerId: this.customerId},

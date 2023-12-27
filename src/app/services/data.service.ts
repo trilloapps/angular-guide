@@ -40,5 +40,12 @@ export class DataService {
       body
     );
   }
+  ProfileFileUpload(body): Observable<any> {
+    return this.http.post<any>(
+      environment.BaseURL + "/foldersvc/cloudstorage/upload",
+      body
+    );
+  }
+  
 }
 

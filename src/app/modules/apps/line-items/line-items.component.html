@@ -13,11 +13,13 @@
             <th scope="col">Code</th>
             <th scope="col">Weight</th>
             <th scope="col">Quantity</th>
+            <th scope="col">Upload</th>
+            
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of items"  (click)="navigateToDetails(item)">
-            <td>
+          <tr *ngFor="let item of items"  >
+            <td (click)="navigateToDetails(item)">
                 <div class="d-flex align-items-center gap-2">
                     <img height="40" width="40" class="rounded-pill" [src]="item.picture" alt="">
                 <span>{{item.itemName}}</span>
@@ -27,9 +29,23 @@
             <td>{{item.itemCode}}</td>
             <td>{{item.weight}}</td>
             <td>{{item.quantity}}</td>
+            <td>
+              <input type="file" (change)="onFileSelect($event)">
+            </td>
           </tr>
         </tbody>
       </table>
       <div *ngIf="items.length == 0" class="text-center">No Data Found!</div>
+      <div *ngIf="items.length > 0" class="justify-content-end d-flex">
+        <ngb-pagination [maxSize]="5" [(page)]="page" (pageChange)="getPaginationFromServer($event)" [pageSize]="pageSize"
+        [collectionSize]="totalSize">
+        <ng-template ngbPaginationPrevious>
+          <i class="fa-solid fa-chevron-left"></i>
+        </ng-template>
+        <ng-template ngbPaginationNext>
+          <i class="fa-solid fa-chevron-right"></i>
+        </ng-template>
+      </ngb-pagination>
+       </div>
 </div>
 </section>
