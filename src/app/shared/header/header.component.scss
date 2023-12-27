@@ -23,3 +23,13 @@
     border-radius: 50%;
     border: 1px solid #000;
 }
+.profile-dropdown::after{
+    display: none;
+}
+.btn-close:focus{
+    box-shadow: none !important;
+}
+.profile-avatar{
+    height: 100px;
+    width: 100px;
+}
