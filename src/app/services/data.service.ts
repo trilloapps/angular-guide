@@ -16,5 +16,36 @@ export class DataService {
       body
     );
   }
+  GetOderList(body): Observable<any> {
+    return this.http.post<any>(
+      environment.BaseURL + "/ds/function/shared/GetCustomerOrders",
+      body
+    );
+  }
+  GetItemList(body): Observable<any> {
+    return this.http.post<any>(
+      environment.BaseURL + "/ds/function/shared/GetOrderItems",
+      body
+    );
+  }
+  GetItemDetail(body): Observable<any> {
+    return this.http.post<any>(
+      environment.BaseURL + "/ds/function/shared/GetItemDetails",
+      body
+    );
+  }
+  EditItem(body): Observable<any> {
+    return this.http.post<any>(
+      environment.BaseURL + "/ds/function/shared/EditLineItem",
+      body
+    );
+  }
+  ProfileFileUpload(body): Observable<any> {
+    return this.http.post<any>(
+      environment.BaseURL + "/foldersvc/cloudstorage/upload",
+      body
+    );
+  }
+  
 }
 
