@@ -14,16 +14,20 @@ export class ItemDetailsComponent implements OnInit {
   customerId: any;
   orderId: any;
   quantity: any;
+  itemId: any;
   constructor(private modalService: NgbModal, private dataService: DataService, private route: ActivatedRoute, private router: Router) {
   }
+
   ngOnInit(): void {
-    this.orderId = this.route.snapshot.queryParams['itemId'];
+    this.orderId = this.route.snapshot.queryParams['orderId'];
     this.customerId = this.route.snapshot.queryParams['customerId'];
-    this.items = this.route.snapshot.queryParams['items'];
-    const itemId = this.route.snapshot.queryParams['itemId']
-    if (itemId) this.GetItemListDetails(itemId);
+    this.itemId = this.route.snapshot.queryParams['itemId']
+    if (this.itemId) this.getItemListDetails(this.itemId);
   }
-  GetItemListDetails(itemId) {
+
+
+  //---------- GET LIST ITEMS ----------
+  getItemListDetails(itemId) {
     let body = {
       itemId: itemId,
     }
@@ -40,11 +44,16 @@ export class ItemDetailsComponent implements OnInit {
     }
     )
   }
-  open(content: any) {
-    this.modalService.open(content, { centered: true })
-  }
-  backtoitems() {
 
+
+  //---------- OPEN EDIT MODAL ----------
+  openEditModal(editModal: any) {
+    this.modalService.open(editModal, { centered: true })
+  }
+
+
+  //---------- BACK TO ITEMS SCREEN ----------
+  backToItems() {
     this.router.navigate(['/app/line-items'], {
       queryParams: {
         orderId: this.orderId,
@@ -52,9 +61,12 @@ export class ItemDetailsComponent implements OnInit {
       }
     });
   }
-  EditItemsList(item) {
+
+
+  //---------- EDIT ITEMS ----------
+  EditItemsList() {
     let body = {
-      lineItemId: item.id.toString(),
+      lineItemId: this.itemId.toString(),
       quantity: this.quantity,
     };
     this.dataService.EditItem(body).subscribe({
@@ -65,6 +77,9 @@ export class ItemDetailsComponent implements OnInit {
             quantity: result.data.quantity,
             itemCode: result.data.itemCode,
             weight: result.data.weight,
+            picture: result.data.picture,
+            itemName: result.data.itemName,
+            itemDescription: result.data.itemDescription,
           };
           this.modalService.dismissAll()
         } else {
@@ -77,6 +92,9 @@ export class ItemDetailsComponent implements OnInit {
       complete: () => { },
     });
   }
+
+
+  //---------- GET QUANTITY ----------
   getQuantityValue(e) {
     this.quantity = e.target.value
     console.log(this.quantity);

@@ -10,6 +10,7 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
+  // API For Login
   AuthService_Login(credentials:any): Observable<any> {
     return this.http.post(environment.BaseURL+'/ajaxLogin',credentials
 );

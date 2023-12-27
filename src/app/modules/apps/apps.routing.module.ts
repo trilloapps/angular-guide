@@ -4,7 +4,7 @@ import { OrdersComponent } from './orders/orders.component';
 import { LineItemsComponent } from './line-items/line-items.component';
 import { ItemDetailsComponent } from './item-details/item-details.component';
 
-export const IntroRoutes: Routes = [
+export const AppsRoutes: Routes = [
   {
     path:'customers', component: CustomersComponent
   },

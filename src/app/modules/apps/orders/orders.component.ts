@@ -16,7 +16,7 @@ interface Orders {
   styleUrls: ['./orders.component.scss']
 })
 export class OrdersComponent implements OnInit {
-  orders : Orders[] = []
+  orders: Orders[] = []
   searchInput: any;
   size = 10
   start = 1;
@@ -25,16 +25,21 @@ export class OrdersComponent implements OnInit {
   pageSize = 10;
   temp: Orders[] = [...this.orders];
   customerId: any;
-  constructor(private dataService: DataService, private route: ActivatedRoute,private router :Router ) { }
+  constructor(private dataService: DataService, private route: ActivatedRoute, private router: Router) { }
+
+
   ngOnInit(): void {
     this.customerId = this.route.snapshot.queryParams['customerId'];
-     if(this.customerId) this.GetOderLists(this.start, this.size, this.customerId);
+    if (this.customerId) this.getOderLists(this.start, this.size, this.customerId);
   }
-  GetOderLists(start: number, size: number, customerId: string) {
+
+
+  //---------- GET ORDERS LIST ----------
+  getOderLists(start: number, size: number, customerId: string) {
     let body = {
       customerId: customerId,
-      start: 1,
-      size: 20000,
+      start: start,
+      size: size,
     }
     this.dataService.GetOderList(body).subscribe({
       next: (result: any) => {
@@ -44,17 +49,20 @@ export class OrdersComponent implements OnInit {
           this.totalSize = result.data.totalData;
           this.temp = [...this.orders]
         }
-    },
-    error: (error) => {
-      console.error(" ERROR ==> ", error);
-    },
-    complete: () => { },
+      },
+      error: (error) => {
+        console.error(" ERROR ==> ", error);
+      },
+      complete: () => { },
     }
-  )
+    )
   }
+
+
+  //---------- GET STATUS CLASS ----------
   getStatusClass(item: any): string {
     switch (item.status) {
-      case 'processing':
+      case 'delivered':
         return 'text-bg-success';
       case 'Cancel':
         return 'text-bg-danger';
@@ -64,30 +72,33 @@ export class OrdersComponent implements OnInit {
         return 'text-bg-secondary';
     }
   }
+
+
+  //---------- SEARCH FILTER ----------
   searchFilter(event: any) {
-    this.searchInput=event.target.value
+    this.searchInput = event.target.value
     const val = event.target.value.toLowerCase();
     // filter our data
-    const temp = this.temp.filter(function (d:any) {
+    const temp = this.temp.filter(function (d: any) {
       return d.title.toLowerCase().indexOf(val) !== -1 || !val;
     });
     this.orders = temp;
   }
-  getRandomDate() {
-    const currentDate = new Date();
-    const randomDaysAgo = Math.floor(Math.random() * 30); // Adjust the range as needed
-    currentDate.setDate(currentDate.getDate() - randomDaysAgo);
-    return currentDate.getTime();
-}
-navigatetoitem(item){
-  this.router.navigate(['/app/line-items'],  {
-    queryParams: { orderId: item.id , customerId: this.customerId},
-  });
-}
-getPaginationFromServer(oIncomingEvent: any) {
-  let incommingPage = oIncomingEvent;
-  let start = (incommingPage - 1) * this.size + 1;
-  this.GetOderLists(start, this.size, this.customerId);
 
-}
+
+  //---------- NAVIGATE TO LINE ITEMS ----------
+  navigatetoitem(item) {
+    this.router.navigate(['/app/line-items'], {
+      queryParams: { orderId: item.id, customerId: this.customerId },
+    });
+  }
+
+
+  //---------- PAGINATION ----------
+  getPaginationFromServer(oIncomingEvent: any) {
+    let incommingPage = oIncomingEvent;
+    let start = (incommingPage - 1) * this.size + 1;
+    this.getOderLists(start, this.size, this.customerId);
+
+  }
 }
