@@ -46,6 +46,12 @@ export class DataService {
       body
     );
   }
+  GetUserDetails(body): Observable<any> {
+    return this.http.post<any>(
+      environment.BaseURL + "/ds/function/shared/GetUserDetails",
+      body
+    );
+  }
   
 }
 
