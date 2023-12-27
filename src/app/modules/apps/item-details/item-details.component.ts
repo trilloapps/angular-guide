@@ -15,6 +15,9 @@ export class ItemDetailsComponent implements OnInit {
   orderId: any;
   quantity: any;
   itemId: any;
+  resMessage: { message: any; responseType: any; color: any };
+  bDisplayErrorBlock: boolean = false;
+
   constructor(private modalService: NgbModal, private dataService: DataService, private route: ActivatedRoute, private router: Router) {
   }
 
@@ -82,12 +85,15 @@ export class ItemDetailsComponent implements OnInit {
             itemDescription: result.data.itemDescription,
           };
           this.modalService.dismissAll()
+          this.displayAlertMessage('Item Edit successfully!', 'success', 'success');
+
         } else {
           console.error("API Error: ", result.message);
         }
       },
       error: (error) => {
         console.error("ERROR: ", error);
+        
       },
       complete: () => { },
     });
@@ -99,4 +105,16 @@ export class ItemDetailsComponent implements OnInit {
     this.quantity = e.target.value
     console.log(this.quantity);
   }
+
+    //---------- ALERT MESSAGES ----------
+    displayAlertMessage(sIncommingMessage, sIncommingResponseType, sIncommingColor) {
+      this.bDisplayErrorBlock = true
+      this.resMessage =
+      {
+        message: sIncommingMessage,
+        responseType: sIncommingResponseType,
+        color: sIncommingColor
+      };
+      setTimeout(() => { this.bDisplayErrorBlock = false; }, 3000);
+    }
 }

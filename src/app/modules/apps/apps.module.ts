@@ -8,6 +8,7 @@ import { OrdersComponent } from './orders/orders.component';
 import { LineItemsComponent } from './line-items/line-items.component';
 import { ItemDetailsComponent } from './item-details/item-details.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
+    SharedModule,
     RouterModule.forChild(AppsRoutes),
     NgbModule
   ]

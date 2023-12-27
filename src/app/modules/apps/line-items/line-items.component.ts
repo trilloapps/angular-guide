@@ -27,6 +27,7 @@ export class LineItemsComponent implements OnInit {
   temp: Items[] = [...this.items];
   customerId: any;
   orderId: any;
+  bLoader: boolean = false;
   constructor(private dataService: DataService, private route: ActivatedRoute, private router: Router, private DataService: DataService) { }
 
   ngOnInit(): void {
@@ -38,6 +39,7 @@ export class LineItemsComponent implements OnInit {
 
   //---------- GET LIST ITEMS ----------
   getItemLists(start: number, size: number, orderId: string) {
+    this.bLoader= true;
     let body = {
       orderId: orderId,
       start: start,
@@ -49,6 +51,7 @@ export class LineItemsComponent implements OnInit {
         if (result.status === "success") {
           this.items = result.data.items;
           this.totalSize = result.data.totalData
+          this.bLoader = false
           this.temp = [...this.items]
         }
 

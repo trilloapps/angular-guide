@@ -25,6 +25,7 @@ export class OrdersComponent implements OnInit {
   pageSize = 10;
   temp: Orders[] = [...this.orders];
   customerId: any;
+  bLoader: boolean = false;
   constructor(private dataService: DataService, private route: ActivatedRoute, private router: Router) { }
 
 
@@ -36,6 +37,7 @@ export class OrdersComponent implements OnInit {
 
   //---------- GET ORDERS LIST ----------
   getOderLists(start: number, size: number, customerId: string) {
+    this.bLoader = true;
     let body = {
       customerId: customerId,
       start: start,
@@ -47,6 +49,7 @@ export class OrdersComponent implements OnInit {
         if (result.status === "success") {
           this.orders = result.data.orders;
           this.totalSize = result.data.totalData;
+          this.bLoader = false;
           this.temp = [...this.orders]
         }
       },

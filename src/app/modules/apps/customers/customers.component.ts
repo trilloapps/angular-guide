@@ -29,6 +29,8 @@ export class CustomersComponent implements OnInit {
   page = 1;
   pageSize = 10;
   totalSize: number;
+  bLoader: boolean = false;
+
 
   constructor(private dataService: DataService, private router: Router) { }
 
@@ -38,6 +40,7 @@ export class CustomersComponent implements OnInit {
 
   //---------- GET CUSTOMERS LIST ----------
   getCustomerList(incommingStart, incommingSize) {
+    this.bLoader = true;
     let body = {
       start: incommingStart,
       size: incommingSize
@@ -48,6 +51,7 @@ export class CustomersComponent implements OnInit {
           this.customersList = result.data.customers;
           this.totalSize = result.data.totalData;
           this.temp = [...this.customersList]
+          this.bLoader = false;
         }
       },
       error: (error) => {
