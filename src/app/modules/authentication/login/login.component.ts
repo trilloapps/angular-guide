@@ -45,12 +45,12 @@ export class LoginComponent implements OnInit {
             localStorage.setItem("userDetail", JSON.stringify(result.user));
             this.router.navigateByUrl('/app/customers');
           } else {
-            console.error("cLoginComponent_SendLoginRequest: Error ===>>", result);
+            console.error("SendLoginRequest: Error ===>>", result);
           }
         },
         error: (error) => {
           this.bLoader = false;
-          console.error("cLoginComponent_SendLoginRequest: ERROR ===>>", error);
+          console.error("SendLoginRequest: ERROR ===>>", error);
           this.displayAlertMessage('Bad Credentials!', 'error', 'danger');
         },
         complete: () => {

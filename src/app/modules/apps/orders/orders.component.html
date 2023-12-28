@@ -28,7 +28,7 @@
           <td>{{item.bookingDateTime | date:'medium'}}</td>
           <td>{{item.deliverDateTime | date:'medium'}}</td>
           <td>
-            <span class="badge" [ngClass]="getStatusClass(item)">
+            <span class="badge"  [ngClass]="getStatusClass(item)">
               {{ item.status | titlecase }}
             </span>
           </td>

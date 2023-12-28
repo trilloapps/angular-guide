@@ -69,8 +69,10 @@ export class OrdersComponent implements OnInit {
         return 'text-bg-success';
       case 'Cancel':
         return 'text-bg-danger';
-      case 'In Transit':
+        case 'processing':
         return 'text-bg-warning';
+      case 'shipped':
+        return 'text-bg-info';
       default:
         return 'text-bg-secondary';
     }
