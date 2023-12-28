@@ -15,6 +15,7 @@ export class ItemDetailsComponent implements OnInit {
   orderId: any;
   quantity: any;
   itemId: any;
+  bLoader: boolean = false;
   resMessage: { message: any; responseType: any; color: any };
   bDisplayErrorBlock: boolean = false;
 
@@ -25,19 +26,22 @@ export class ItemDetailsComponent implements OnInit {
     this.orderId = this.route.snapshot.queryParams['orderId'];
     this.customerId = this.route.snapshot.queryParams['customerId'];
     this.itemId = this.route.snapshot.queryParams['itemId']
-    if (this.itemId) this.getItemListDetails(this.itemId);
+    if (this.itemId) this.getItemListDetails();
   }
 
 
   //---------- GET LIST ITEMS ----------
-  getItemListDetails(itemId) {
+  getItemListDetails() {
+    this.bLoader = true;
     let body = {
-      itemId: itemId,
+      itemId: this.itemId,
     }
     this.dataService.GetItemDetail(body).subscribe({
       next: (result: any) => {
         if (result.status === "success") {
-          this.items = result.data
+          this.items = result.data;
+          this.quantity = result.data.quantity
+          this.bLoader = false;
         }
       },
       error: (error) => {
@@ -67,7 +71,7 @@ export class ItemDetailsComponent implements OnInit {
 
 
   //---------- EDIT ITEMS ----------
-  EditItemsList() {
+  editItemsList() {
     let body = {
       lineItemId: this.itemId.toString(),
       quantity: this.quantity,
