@@ -21,7 +21,7 @@
     width: 30px !important;
     height: 30px !important;
     border-radius: 50%;
-    border: 1px solid #000;
+    border: 1px solid #fff;
 }
 .profile-dropdown::after{
     display: none;
@@ -32,4 +32,10 @@
 .profile-avatar{
     height: 100px;
     width: 100px;
+}
+.navbar{
+    background-color: #324d90 !important;
+}
+.disable{
+    pointer-events: none;
 }
