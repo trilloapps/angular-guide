@@ -28,6 +28,7 @@ body{
     border: 1px solid #f3f3f3;
     border-radius: 8px;
     background-color: #fff;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 @media (max-width:560px){
@@ -43,14 +44,16 @@ body{
     height: 100vh;
     width: 100vw;
     background-size: cover;
-    filter: blur(1px) brightness(70%);
+    filter: brightness(75%);
+    background-position: center center;
+    background-attachment: fixed;
 }
 .auth-card input:focus{
     box-shadow: none !important;
 }
 
 .navbar .dropdown-menu {
-    left: -170px !important;
+    left: -140px !important;
 }
 
 .navbar .dropdown-toggle:empty::after{
@@ -78,9 +81,29 @@ table tr{
 
 
 .btn-primary {
-    background-color: #2D88D4 !important;
-    border-color: #2D88D4 !important;
+    background-color: #324d90 !important;
+    border-color: #324d90 !important;
     &:hover{
         box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
     }
+    &:active{
+        background-color: #324d90 !important;
+    }
+}
+.dropdown-item:active{
+    background-color: #324d90 !important;
+}
+.active>.page-link, .page-link.active {
+    background-color: #324d90 !important;
+    border-color: #324d90 !important;
+    color: #fff !important;
+  }
+  .page-link {
+    color: #324d90 !important;
+}
+.page-link:focus {
+    box-shadow: none !important;
+}
+.form-control:focus{
+    box-shadow: none !important;
 }
