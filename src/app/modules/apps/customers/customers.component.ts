@@ -68,7 +68,7 @@ export class CustomersComponent implements OnInit {
     const val = event.target.value.toLowerCase();
     // filter our data
     const temp = this.temp.filter(function (d: any) {
-      return d.firstName.toLowerCase().indexOf(val) !== -1 || !val;
+      return d.firstName.toLowerCase().indexOf(val) !== -1 || d.lastName.toLowerCase().indexOf(val) !== -1 || !val;
     });
     this.customersList = temp;
   }
