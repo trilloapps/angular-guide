@@ -54,7 +54,7 @@
 
       <div class="form-group mb-3">
         <label for="" class="form-label">Quantity</label>
-        <input type="number" class="form-control" value="{{items?.quantity}}" min="0"
+        <input type="text" class="form-control" value="{{items?.quantity}}"   max="5" maxlength="5" (input)="onInput($event)"
           (change)="getQuantityValue($event)">
       </div>
     </form>
