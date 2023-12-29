@@ -110,6 +110,19 @@ export class ItemDetailsComponent implements OnInit {
     console.log(this.quantity);
   }
 
+
+  //---------- RESTRICT TO ACCEPT NUMBERS ONLY ----------
+  onInput(event: any): void {
+    // Get the input value
+    let inputValue: string = event.target.value;
+
+    // Remove non-numeric characters
+    inputValue = inputValue.replace(/[^0-9]/g, '');
+
+    // Set the filtered value back to the input
+    event.target.value = inputValue;
+  }
+
     //---------- ALERT MESSAGES ----------
     displayAlertMessage(sIncommingMessage, sIncommingResponseType, sIncommingColor) {
       this.bDisplayErrorBlock = true
