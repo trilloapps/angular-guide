@@ -12,7 +12,7 @@ export class AuthService {
 
   // API For Login
   AuthService_Login(credentials:any): Observable<any> {
-    return this.http.post(environment.BaseURL+'/ajaxLogin',credentials
+    return this.http.post(environment.BaseURL+'/_preauthsvc/user/authenticate',credentials
 );
   }
 }
