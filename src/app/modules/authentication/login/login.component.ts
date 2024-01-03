@@ -24,8 +24,8 @@ export class LoginComponent implements OnInit {
   //---------- INITIALIZE LOGIN FORM ----------
   initializeLoginForm() {
     this.loginForm = new FormGroup({
-      j_username: new FormControl(null, [Validators.required,]),
-      j_password: new FormControl(null, [Validators.required]),
+      userId: new FormControl(null, [Validators.required,]),
+      password: new FormControl(null, [Validators.required]),
     });
   }
 
@@ -36,8 +36,8 @@ export class LoginComponent implements OnInit {
       this.bLoader = true;
   
       this.authservice.AuthService_Login({
-        j_username: this.loginForm.value.j_username,
-        j_password: this.loginForm.value.j_password,
+        userId: this.loginForm.value.userId,
+        password: this.loginForm.value.password,
       }).subscribe({
         next: (result) => {
           if (result.status == 'connected') {

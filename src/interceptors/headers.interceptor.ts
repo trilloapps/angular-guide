@@ -17,7 +17,7 @@ export class HeadersInterceptor implements HttpInterceptor {
       'Authorization':'Bearer ' + JSON.parse(localStorage.getItem('lsSampleAppAccessToken')),
     }
     if (request.url.includes('/upload')) delete oHeaders['content-type'];
-    if((request.url.includes('ajaxLogin')))
+    if((request.url.includes('/_preauthsvc/user/authenticate')))
        {
          this.oRequestWithHeaders  = request.clone({ setHeaders: {
           'Accept':'*/*',
