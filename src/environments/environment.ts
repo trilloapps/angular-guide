@@ -3,6 +3,6 @@ export const environment =
   production: false,
   APP_NAME: 'SampleApp',
   Title: 'Sample App',
-  BaseURL: 'https://api.eng-dev-1.trilloapps.com',
+  BaseURL: 'https://fe-wb-lab1.kdlabs.dev',
   AccessToken :'lsSampleAppAccessToken',
 };

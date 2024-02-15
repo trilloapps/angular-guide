@@ -28,7 +28,7 @@ constructor(private router : Router, private modalService: NgbModal, private Dat
     }
     this.DataService.GetUserDetails(body).subscribe({
       next :(result) => {
-          this.userProfileImage = result.data[0].pictureUrl
+          this.userProfileImage = result.data.pictureUrl
       }
     })
   }
@@ -59,12 +59,12 @@ constructor(private router : Router, private modalService: NgbModal, private Dat
       const formData: FormData = new FormData();
       formData.append("file", file);
       formData.append("folder", "public/images");
-      formData.append("makePublic", "true");
+      formData.append("makePublic", "false");
       formData.append("functionName", "AddUserImage");
       formData.append("functionParam", JSON.stringify(functionParam));
       this.DataService.ProfileFileUpload(formData).subscribe({
         next: (response) => {
-          this.userProfileImage= response.pictureUrl
+          this.getUserDetails()
         },
         error: (error) => {
           console.error(error)
