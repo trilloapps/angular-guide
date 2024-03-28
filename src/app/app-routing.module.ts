@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { BlankComponent } from './layouts/blank/blank.component';
 import { FullComponent } from './layouts/full/full.component';
 import { canActivateTeam } from './guards/auth.guard';
+import { userAccessGuard } from './guards/user-access.guard';
 
 
 const routes: Routes = [
@@ -27,6 +28,10 @@ const routes: Routes = [
       {
         path:'app',canActivate: [canActivateTeam],
         loadChildren: () => import('./modules/apps/apps.module').then(m => m.AppsModule)
+      },
+      {
+        path:'admin',canActivate: [canActivateTeam,userAccessGuard],
+        loadChildren: () => import('./modules/usermanager/usermanager.module').then(m => m.UsermanagerModule)
       },
     ]
   },

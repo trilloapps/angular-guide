@@ -1,0 +1,42 @@
+<app-alert *ngIf="bDisplayErrorBlock" [resMessage]="resMessage"></app-alert>
+
+<div class='auth-card shadow'>
+    <div class="">
+        <h2 class="text-primary fw-bold  text-center mb-4">
+            We just texted you</h2>
+            <p class="m-0 pb-2 text-center"><b>A verification code was sent to your Phone Number</b></p>
+             <form [formGroup]="verificationCodeForm">
+                   <div class="d-flex align-items-center gap-2 pb-2">
+                    <input
+                    type="text"
+                    maxlength="6"
+                    class="form-control"
+                    placeholder="Enter 6 digit code"
+                    onkeypress="return event.charCode <= 57 && event.charCode >= 48"
+                    formControlName="verificationCode"
+                    />
+                  </div>
+                  <small
+                  *ngIf="verificationCodeForm.get('verificationCode').hasError('minlength')" class="text-danger support-text">Verification Code must be of 6 digits.</small>
+                   <small *ngIf="
+                   verificationCodeForm.controls['verificationCode'].hasError('required') &&
+                   verificationCodeForm.controls['verificationCode'].touched
+                 " class="text-danger font-14 mt-1">
+                  Please enter verification code
+                 </small>
+                  </form>
+            <div class="text-center mt-4">
+              <button
+                class="btn btn-primary" (click)="verifyToken()" [disabled]="Loader"
+              >
+              <span *ngIf="!Loader">Submit Code</span>
+                <div *ngIf="Loader" class="spinner-border spinner-border-sm" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </button>
+            </div>
+       <div class="text-center mt-5">
+        <div class="d-flex gap-2 text-center"><p class="m-0 pt-2 pb-2 "><b>Having issues recieving a code?</b></p> <a href="javascript:void(0)" class="pt-2 pb-2">Contact support</a></div>
+       </div>
+      </div>
+</div>
