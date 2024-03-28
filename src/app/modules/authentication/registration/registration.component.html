@@ -1,0 +1,192 @@
+<app-alert *ngIf="bDisplayErrorBlock" [resMessage]="resMessage"></app-alert>
+
+<div class='auth-bg'></div>
+    <div *ngIf="verificationSection" class='auth-card shadow'>
+      <form [formGroup]="newUserForm" (submit)="sendSignUpRequestWithRecaptchaToken()">
+        <!-- <div class=" p-0"> -->
+        <div class='login-logo mb-3'>SignUp</div>
+        <div class="row">
+            <div class="form-group mb-3 col-md-12">
+              <label class="form-label" for="email">Email</label>
+              <input
+                type="text"
+                placeholder="Email"
+                class="form-control input"
+                id="email"
+                formControlName="email"
+              />
+              <small
+                *ngIf="
+                  (newUserForm.controls['email'].invalid) &&  (newUserForm.controls['email'].dirty && newUserForm.controls['email'].value != '')
+                "
+                class="text-danger support-text"
+                >You have not given a correct e-mail address
+              </small>
+              <small
+                *ngIf="
+                  (newUserForm.controls['email'].hasError('required') &&
+                  newUserForm.controls['email'].touched )
+                "
+                class="text-danger support-text"
+                >Email is required
+              </small>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group mb-3 col-md-6">
+              <label class="form-label" for="userId">User ID</label>
+              <input onkeypress="return event.charCode != 32"
+                type="text"
+                placeholder="User ID"
+                class="form-control input"
+                id="userId"
+                formControlName="userId"
+              />
+              <small
+                *ngIf="
+                  newUserForm.controls['userId'].errors?.['minlength'] ||
+                  newUserForm.controls['userId'].errors?.['maxlength']
+                "
+                class="text-danger support-text"
+                >The input value must be between 2-16 characters
+              </small>
+              <small
+              *ngIf="
+                newUserForm.controls['userId'].hasError('required') &&
+                newUserForm.controls['userId'].touched 
+              "
+              class="text-danger support-text"
+              >User ID is required
+            </small>
+            </div>
+            <div class="form-group mb-3 col-md-6">
+                <label class="form-label" for="mobilePhone">Mobile Phone</label>
+                <input
+                  type="text"
+                  onkeypress="return event.charCode <= 57 && event.charCode >= 48 || event.charCode == 43"
+                  placeholder="Mobile Phone"
+                  class="form-control input"
+                  id="mobilePhone"
+                  formControlName="mobilePhone"
+                />
+                <small
+                *ngIf="newUserForm.controls['mobilePhone'].hasError('required') && newUserForm.controls['mobilePhone'].touched"
+                class="text-danger">Mobile Phone is required
+            </small>
+            <small
+              *ngIf="newUserForm.controls['mobilePhone'].hasError('invalidPhoneNumber')"
+              class="text-danger">Mobile Phone should be valid with Country Code.
+            </small>
+              </div>
+          </div>
+          <div class="row">
+            <div class="form-group mb-3 col-md-6">
+              <label class="form-label" for="firstName">First Name</label>
+              <input
+                type="text"
+                placeholder="First Name"
+                class="form-control input"
+                id="firstName"
+                formControlName="firstName"
+              />
+              <small
+              *ngIf="newUserForm.controls['firstName'].hasError('required') && newUserForm.controls['firstName'].touched"
+              class="text-danger">First name is required
+          </small>
+          <small
+              *ngIf="newUserForm.controls['firstName'].hasError('pattern')"
+              class="text-danger">First character cannot be space
+          </small>
+            </div>
+            <div class="form-group mb-3 col-md-6">
+              <label class="form-label" for="lastName">Last Name</label>
+              <input
+                type="text"
+                placeholder="Last Name"
+                class="form-control input"
+                id="lastName"
+                formControlName="lastName"
+              />
+              <small
+              *ngIf="newUserForm.controls['lastName'].hasError('required') && newUserForm.controls['lastName'].touched"
+              class="text-danger">Last name is required
+          </small>
+          <small
+              *ngIf="newUserForm.controls['lastName'].hasError('pattern')"
+              class="text-danger">First character cannot be space
+          </small>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group mb-3 col-md-6">
+              <label class="form-label" for="password">Password</label>
+              <input
+                type="password"
+                placeholder="Password"
+                class="form-control input"
+                id="password"
+                formControlName="password"
+              />
+              <small
+                *ngIf="
+                  newUserForm.controls['password'].errors?.['minlength']
+                "
+                class="text-danger support-text"
+                >The input value is shorter than 8 characters</small
+              >
+              <small
+              *ngIf="
+                newUserForm.controls['password'].hasError('required') &&
+                newUserForm.controls['password'].touched 
+              "
+              class="text-danger support-text"
+              >Password is required</small
+            >
+            </div>
+            <div class="form-group mb-3 col-md-6">
+              <label class="form-label" for="rptPassword">Confirm Password</label>
+              <input
+                type="password"
+                placeholder="Confirm Password"
+                class="form-control input"
+                id="rptPassword"
+                formControlName="rptPassword"
+              />
+              <small
+                *ngIf="
+                  newUserForm.controls['rptPassword'].errors?.['minlength']
+                "
+                class="text-danger support-text"
+                >The input value is shorter than 8 characters</small
+              >
+              <small
+              *ngIf="
+                newUserForm.controls['rptPassword'].hasError('required') &&
+                newUserForm.controls['rptPassword'].touched 
+              "
+              class="text-danger support-text"
+              >Confirm password is required</small
+            >
+              <small *ngIf="newUserForm.controls['rptPassword'].errors?.['mustMatch'] && newUserForm.controls['rptPassword'].dirty"
+                      class="text-danger">Password and confirm password does not match</small>
+            </div>
+          </div>
+        <!-- </div> -->
+        <div class='form-group mb-3'>
+            <button class='btn btn-primary w-100' type="submit" [disabled]="Loader">
+                <span *ngIf="!Loader">Submit</span>
+                <div *ngIf="Loader" class="spinner-border spinner-border-sm" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+            </button>
+           </div>
+           <div class="text-center mb-3">
+            <span>Already have a member? <a class=" text-primary" routerLink="/auth/login">Login</a> </span>
+          </div>
+      </form>
+    </div>
+<div class="d-flex justify-content-center" id="recaptcha-container-login"></div>
+<app-phone-verification *ngIf="!verificationSection" [confirmationResult]="fireBaseConfirmationResult" [loginStatusResult]="newUserForm.value" (verificationProcess)="SignupFailed($event)"></app-phone-verification>
+
+
+  

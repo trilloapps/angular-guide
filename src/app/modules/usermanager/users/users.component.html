@@ -1,0 +1,741 @@
+<app-alert *ngIf="bDisplayErrorBlock" [resMessage]="resMessage"></app-alert>
+
+<!------------------------------****************************** HTML Structure ******************************------------------------------>
+<div class="bg-white mb-3">
+  <div class="row p-1 g-0 page-titles">
+    <!-- <div class="mb-2 text-decoration" (click)="BackToCustomers()" style="font-size: 13px;"><i
+      class="fa-solid fa-arrow-turn-down-left me-2"></i> Back to customers</div> -->
+    <div class="col-3 d-flex align-items-center">
+      <h3 class="mb-0 heading">Users</h3>
+    </div>
+    <div class="col-9">
+      <div class="text-end">
+      
+        <button class="btn btn-primary btn-sm" type="button" (click)="UsersComponent_AddNewUser(newUser)">
+          <span class="me-2">
+            <i class="bi bi-plus-lg"></i>
+          </span>
+          New User
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-------------------- Download And Search CSV -------------------->
+<div class="row px-1  g-0">
+  <div class="col-md-6 d-flex">
+    <button class="btn btn-primary btn-sm me-2" type="button" (click)="UsersComponent_DownloadCSV()" [disabled]="lUsersList.length==0">
+      CSV
+    </button>
+  </div>
+  <div class="col-md-6 users-manager-search">
+    <div class="position-relative search-section">
+      <input
+        class="form-control pl-35"
+        type="text"
+        placeholder="Search by user id"
+        aria-label="default input example"
+        [(ngModel)]="searchInput"
+        (keyup)="UsersComponent_UserSearchFilter($event)"
+      />
+      <span class="search-icon">
+        <i class="bi bi-search"></i>
+      </span>
+    </div>
+  </div>
+</div>
+<!--------------------------------------------------------------------->
+
+
+<!-------------------- User Table -------------------->
+<div class="row g-0">
+  <div class="col-md-12">
+    <div class="p-1">
+      <div   class="table-responsive users-table">
+        <table class="table table-striped m-0">
+          <thead class="">
+            <tr>
+              <th  scope="col" class="cursor-pointer" *ngFor="let item of columns" (click)="UsersComponent_SortData(item)">{{item.displayName}}
+                <span>
+                  <i class="bi bi-arrow-down-up ml-1" [ngClass]="item.direction==' '?'d-inline':'d-none'"></i>
+                  <i class="bi bi-arrow-up ms-2 "  [ngClass]="item.direction=='asc'?'d-inline':'d-none'"></i>
+                  <i class="bi bi-arrow-down ms-2 "  [ngClass]="item.direction=='desc'?'d-inline':'d-none'"></i>
+                </span>
+              </th>
+             
+              <th class="text-center action-cursor" scope="col">Action</th>
+            </tr >
+          </thead>
+          <tbody *ngIf="lUsersList && lUsersList.length>0">
+            <tr *ngFor="let item of lUsersList.slice((page-1) * pageSize , (page-1) * pageSize + pageSize)" 
+             (click)="selectedRow(item)">
+              <td [class.selectedRow]="rowSelected?.userId==item?.userId">{{ item.userId }}</td>
+              <td [class.selectedRow]="rowSelected?.userId==item?.userId">{{ item.email }}</td>
+              <td [class.selectedRow]="rowSelected?.userId==item?.userId">{{ item.firstName }}</td>
+              <td [class.selectedRow]="rowSelected?.userId==item?.userId">{{ item.lastName }}</td>
+              <td [class.selectedRow]="rowSelected?.userId==item?.userId">{{ item.role }}</td>
+              <td [class.selectedRow]="rowSelected?.userId==item?.userId">{{ item.lastAccessTS===0?'':  item.lastAccessTS | date : "short" }}</td>
+              <td [class.selectedRow]="rowSelected?.userId==item?.userId">
+                <span class="table-logins">
+                  {{ item.accessCount }}
+                </span>
+              </td>
+              <td [class.selectedRow]="rowSelected?.userId==item?.userId">{{ item.inactive===false?"No":"Yes"}}</td>
+              <td class="text-center" [class.selectedRow]="rowSelected?.userId==item?.userId">
+                <div
+                  ngbDropdown
+                  class="d-inline-block eclipse-drodown position-relative cursor-pointer"
+                >
+                  <button
+                    type="button"
+                    class="border-0 bg-transparent"
+                    id="dropdownBasic1"
+                    ngbDropdownToggle
+                  >
+                    <span [ngClass]="rowSelected?.userId==item?.userId ? 'text-white':''" class="bi bi-three-dots-vertical"></span>
+                  </button>
+                  <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button
+                      ngbDropdownItem
+                      class="btn btn-link1"
+                      type="button"
+                      data-for-class="User"
+                      nm="editUser"
+                      (click)="UsersComponent_EditUser(item, edit)"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      ngbDropdownItem
+                      class="btn btn-link1"
+                      type="button"
+                      data-for-class="User"
+                      nm="resetPassword"
+                      (click)="UsersComponent_ResetPasswordValue(item, resetpassword)"
+                    >
+                      Change Password
+                    </button>
+                    <button
+                      ngbDropdownItem
+                      class="btn btn-link1"
+                      type="button"
+                      nm="suspendUser"
+                      (click)="UsersComponent_SuspendUserModal(item, suspend)"
+                    >
+                      <span>{{item.inactive===true?"Resume":"Suspend"}}</span>
+                    </button>
+                    <button
+                      ngbDropdownItem
+                      class="btn btn-link1 d-none"
+                      type="button"
+                      nm="resumeUser"
+                    >
+                      <span>Resume</span>
+                    </button>
+
+                    <button
+                      ngbDropdownItem
+                      class="btn btn-link1"
+                      data-for-class="User"
+                      type="button"
+                      nm="deleteUser"
+                      (click)="UsersComponent_DeleteUserModal(item, deleteUser)"
+                    >
+                      <span>Delete</span>
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="text-center mt-3 text-black-0 heading" *ngIf="lUsersList && lUsersList.length==0">No Data Found!</div>
+      </div>
+      <div *ngIf="lUsersList && lUsersList.length>0" class="d-flex justify-content-end mt-3 px-3">
+        <ngb-pagination [maxSize]="5" [(page)]="page" [pageSize]="pageSize" [collectionSize]="lUsersList.length" size="sm">
+        </ngb-pagination>
+      </div>
+    </div>
+  </div>
+</div>
+<!--------------------------------------------------------------------->
+<!------------------------------************************************************************------------------------------>
+
+<!------------------------------****************************** Modals ******************************------------------------------>
+<!-------------------- Edit User Modal -------------------->
+<ng-template #content #edit let-modal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-basic-title">Edit User</h5>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="editForm">
+      <div class="modal-body p-0">
+        <div class="row">
+          <div class="form-group mb-3 col-md-6">
+            <label class="form-label " for="userId">User ID</label>
+            <input
+              type="text"
+              placeholder="User ID"
+              class="form-control input readOnly"
+              id="userId"
+              formControlName="userId"
+              readonly
+            />
+          </div>
+          <div class="form-group mb-3 col-md-6">
+            <label class="form-label" for="id">Role</label>
+            <ng-select
+								[items]="roles"
+								bindLabel="name" 
+								bindValue="id" 
+								placeholder="Select Role"
+                formControlName="role"
+								>
+								</ng-select> 
+                <small
+                *ngIf="
+                  editForm.controls['role'].hasError('required') &&
+                  editForm.controls['role'].touched
+                "
+                class="text-danger support-text"
+                >Role is required
+              </small>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group mb-3 col-md-6">
+            <label class="form-label " for="email">Email</label>
+            <input
+              type="text"
+              placeholder="Email"
+              class="form-control input readOnly"
+              id="email"
+              formControlName="email"
+              readonly
+            />
+            <small
+              *ngIf="
+                editForm.controls['email'].hasError('required') &&
+                editForm.controls['email'].touched
+              "
+              class="text-danger support-text"
+              >You have not given a correct e-mail address
+            </small>
+          </div>
+          <div class="form-group mb-3 col-md-6">
+            <label class="form-label" for="mobilePhone">Mobile Phone</label>
+            <input
+              type="text"
+              onkeypress="return event.charCode <= 57 && event.charCode >= 48 || event.charCode == 43"
+              placeholder="Mobile Phone"
+              class="form-control input"
+              id="mobilePhone"
+              formControlName="mobilePhone"
+            />
+            <small
+            *ngIf="editForm.controls['mobilePhone'].hasError('required') && editForm.controls['mobilePhone'].touched"
+            class="text-danger">Mobile Phone is required
+        </small>
+        <small
+          *ngIf="editForm.controls['mobilePhone'].hasError('invalidPhoneNumber')"
+          class="text-danger">Mobile Phone should be valid with Country Code.
+        </small>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group mb-3 col-md-6">
+            <label class="form-label" for="firstName">First Name</label>
+            <input
+              type="text"
+              placeholder="First Name"
+              class="form-control input"
+              id="firstName"
+              formControlName="firstName"
+            />
+            <small
+            *ngIf="editForm.controls['firstName'].hasError('required') && editForm.controls['firstName'].touched"
+            class="text-danger">First name is required
+        </small>
+        <small
+            *ngIf="editForm.controls['firstName'].hasError('pattern')"
+            class="text-danger">First character cannot be space
+        </small>
+          </div>
+          <div class="form-group mb-3 col-md-6">
+            <label class="form-label" for="lastName">Last Name</label>
+            <input
+              type="text"
+              placeholder="Last Name"
+              class="form-control input"
+              id="lastName"
+              formControlName="lastName"
+            />
+            <small
+            *ngIf="editForm.controls['lastName'].hasError('required') && editForm.controls['lastName'].touched"
+            class="text-danger">Last name is required
+        </small>
+        <small
+            *ngIf="editForm.controls['lastName'].hasError('pattern')"
+            class="text-danger">First character cannot be space
+        </small>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-sm-6">
+            <label class="form-label" for="companyName">Company</label>
+            <input
+              type="text"
+              placeholder="Company"
+              class="form-control input"
+              id="companyName"
+              formControlName="companyName"
+            />
+          </div>
+          <div class="form-group col-md-6">
+            <label class="form-label" for="deptName">Department</label>
+            <input
+              type="text"
+              placeholder="Department"
+              class="form-control input"
+              id="deptName"
+              formControlName="deptName"
+            />
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <!-- <app-loader *ngIf="bLoading"></app-loader> -->
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="modal.close('Close click')"
+    >
+      Cancel
+    </button>
+    <button
+
+      type="button"
+      class="btn btn-primary"
+      (click)="UsersComponent_EditUserValue()"
+    >
+      Submit
+    </button>
+    
+  </div>
+</ng-template>
+<!--------------------------------------------------------------------->
+
+<!-------------------- Add New User Modal -------------------->
+<ng-template #newUser let-modal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-basic-title">New User</h5>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="newUserForm">
+      <div class="modal-body p-0">
+        <div class="row">
+          <div class="form-group mb-3 col-md-6">
+            <label class="form-label" for="userId">User ID</label>
+            <input onkeypress="return event.charCode != 32"
+              type="text"
+              placeholder="User ID"
+              class="form-control input"
+              id="userId"
+              formControlName="userId"
+            />
+            <small
+              *ngIf="
+                newUserForm.controls['userId'].errors?.['minlength'] ||
+                newUserForm.controls['userId'].errors?.['maxlength']
+              "
+              class="text-danger support-text"
+              >The input value must be between 2-16 characters
+            </small>
+            <small
+            *ngIf="
+              newUserForm.controls['userId'].hasError('required') &&
+              newUserForm.controls['userId'].touched 
+            "
+            class="text-danger support-text"
+            >User ID is required
+          </small>
+          </div>
+          <div class="form-group mb-3 col-md-6">
+            <label class="form-label" for="id">Role</label>
+            <ng-select
+            [items]="roles"
+            bindLabel="name" 
+            bindValue="id" 
+            placeholder="Select Role"
+           formControlName="role"
+            >
+            </ng-select>
+            <small
+            *ngIf="newUserForm.controls['role'].hasError('required') && newUserForm.controls['role'].touched"
+            class="text-danger">Role is required
+        </small>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group mb-3 col-md-6">
+            <label class="form-label" for="password">Password</label>
+            <input
+              type="password"
+              placeholder="Password"
+              class="form-control input"
+              id="password"
+              formControlName="password"
+            />
+            <small
+              *ngIf="
+                newUserForm.controls['password'].errors?.['minlength']
+              "
+              class="text-danger support-text"
+              >The input value is shorter than 8 characters</small
+            >
+            <small
+            *ngIf="
+              newUserForm.controls['password'].hasError('required') &&
+              newUserForm.controls['password'].touched 
+            "
+            class="text-danger support-text"
+            >Password is required</small
+          >
+          </div>
+          <div class="form-group mb-3 col-md-6">
+            <label class="form-label" for="rptPassword">Confirm Password</label>
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              class="form-control input"
+              id="rptPassword"
+              formControlName="rptPassword"
+            />
+            <small
+              *ngIf="
+                newUserForm.controls['rptPassword'].errors?.['minlength']
+              "
+              class="text-danger support-text"
+              >The input value is shorter than 8 characters</small
+            >
+            <small
+            *ngIf="
+              newUserForm.controls['rptPassword'].hasError('required') &&
+              newUserForm.controls['rptPassword'].touched 
+            "
+            class="text-danger support-text"
+            >Confirm password is required</small
+          >
+            <small *ngIf="newUserForm.controls['rptPassword'].errors?.['mustMatch'] && newUserForm.controls['rptPassword'].dirty"
+                    class="text-danger">Password and confirm password does not match</small>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group mb-3 col-md-6">
+            <label class="form-label" for="email">Email</label>
+            <input
+              type="text"
+              placeholder="Email"
+              class="form-control input"
+              id="email"
+              formControlName="email"
+            />
+            <small
+              *ngIf="
+                (newUserForm.controls['email'].invalid) &&  (newUserForm.controls['email'].dirty && newUserForm.controls['email'].value != '')
+              "
+              class="text-danger support-text"
+              >You have not given a correct e-mail address
+            </small>
+            <small
+              *ngIf="
+                (newUserForm.controls['email'].hasError('required') &&
+                newUserForm.controls['email'].touched )
+              "
+              class="text-danger support-text"
+              >Email is required
+            </small>
+          </div>
+          <div class="form-group mb-3 col-md-6">
+            <label class="form-label" for="mobilePhone">Mobile Phone</label>
+            <input
+              type="text"
+              onkeypress="return event.charCode <= 57 && event.charCode >= 48 || event.charCode == 43"
+              placeholder="Mobile Phone"
+              class="form-control input"
+              id="mobilePhone"
+              formControlName="mobilePhone"
+            />
+            <small
+            *ngIf="newUserForm.controls['mobilePhone'].hasError('required') && newUserForm.controls['mobilePhone'].touched"
+            class="text-danger">Mobile Phone is required
+        </small>
+        <small
+          *ngIf="newUserForm.controls['mobilePhone'].hasError('invalidPhoneNumber')"
+          class="text-danger">Mobile Phone should be valid with Country Code.
+        </small>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group mb-3 col-md-6">
+            <label class="form-label" for="firstName">First Name</label>
+            <input
+              type="text"
+              placeholder="First Name"
+              class="form-control input"
+              id="firstName"
+              formControlName="firstName"
+            />
+            <small
+            *ngIf="newUserForm.controls['firstName'].hasError('required') && newUserForm.controls['firstName'].touched"
+            class="text-danger">First name is required
+        </small>
+        <small
+            *ngIf="newUserForm.controls['firstName'].hasError('pattern')"
+            class="text-danger">First character cannot be space
+        </small>
+          </div>
+          <div class="form-group mb-3 col-md-6">
+            <label class="form-label" for="lastName">Last Name</label>
+            <input
+              type="text"
+              placeholder="Last Name"
+              class="form-control input"
+              id="lastName"
+              formControlName="lastName"
+            />
+            <small
+            *ngIf="newUserForm.controls['lastName'].hasError('required') && newUserForm.controls['lastName'].touched"
+            class="text-danger">Last name is required
+        </small>
+        <small
+            *ngIf="newUserForm.controls['lastName'].hasError('pattern')"
+            class="text-danger">First character cannot be space
+        </small>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-sm-6">
+            <label class="form-label" for="companyName">Company</label>
+            <input
+              type="text"
+              placeholder="Company"
+              class="form-control input"
+              id="companyName"
+              formControlName="companyName"
+            />
+          </div>
+          <div class="form-group col-md-6">
+            <label class="form-label" for="deptName">Department</label>
+            <input
+              type="text"
+              placeholder="Department"
+              class="form-control input"
+              id="deptName"
+              formControlName="deptName"
+            />
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <!-- <app-loader *ngIf="bLoading"></app-loader> -->
+
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="newUserForm.reset(); modal.close('Close click')"
+    >
+      Cancel
+    </button>
+    <button
+
+      type="button"
+      class="btn btn-primary"
+      (click)="UsersComponent_AddUser(newUser)"
+    >
+      Submit
+    </button>
+    
+  </div>
+</ng-template>
+<!--------------------------------------------------------------------->
+
+<!-------------------- Reset Password Modal -------------------->
+<ng-template #resetpassword let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-basic-title">Change Password</h5>
+    <!-- <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button> -->
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="resetPasswordForm">
+      <div class="modal-body p-0">
+        <div class="row">
+          <div class="form-group mb-3 col-md-12">
+            <label class="form-label " for="userid">User ID</label>
+            <input
+              type="text"
+              placeholder="User ID"
+              class="form-control input readOnly"
+              id="userid"
+              formControlName="userId"
+              readonly
+            />
+          </div>
+          <div class="form-group mb-3 col-md-12">
+            <label class="form-label" for="newpassword">New Password</label>
+            <input
+              type="password"
+              placeholder="New Password"
+              class="form-control input"
+              id="newpassword"
+              formControlName="password"
+            />
+            <small
+            *ngIf="
+            resetPasswordForm.controls['password'].hasError('required') &&
+            resetPasswordForm.controls['password'].touched
+            "
+            class="text-danger support-text"
+            >New password is required</small
+          >
+          <small
+          *ngIf="
+          resetPasswordForm.controls['password'].errors?.['minlength']
+          "
+          class="text-danger support-text"
+          >The input value is shorter than 8 characters</small
+        >
+          </div>
+          <div class="form-group mb-3 col-md-12">
+            <label class="form-label" for="repeatnewpassword">Confirm New Password</label>
+            <input
+              type="password"
+              placeholder="Confirm New Password"
+              class="form-control input"
+              id="repeatnewpassword"
+              formControlName="rptPassword"
+            />
+            <small
+              *ngIf="
+              resetPasswordForm.controls['rptPassword'].hasError('required') &&
+              resetPasswordForm.controls['rptPassword'].touched 
+              "
+              class="text-danger support-text"
+              >Confirm new password is required </small
+            >
+            <small
+            *ngIf="
+            resetPasswordForm.controls['rptPassword'].errors?.['minlength']
+            "
+            class="text-danger support-text"
+            >The input value is shorter than 8 characters</small
+          >
+            <small *ngIf="resetPasswordForm.controls['rptPassword'].errors?.['mustMatch'] && resetPasswordForm.controls['rptPassword'].dirty"
+                    class="text-danger">Password and confirm password does not match</small>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <!-- <app-loader *ngIf="bLoading"></app-loader> -->
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="UsersComponent_DismissModal()"
+    >
+      Cancel
+    </button>
+    <button  type="button" class="btn btn-primary" (click)="UsersComponent_ResetPassword()" >
+      Submit
+    </button>
+    
+  </div>
+</ng-template>
+<!--------------------------------------------------------------------->
+
+<!-------------------- Suspend And Resume Modal -------------------->
+<ng-template #suspend let-c="close" let-d="dismiss" let-modal>
+  <div class="modal-header">
+    <h5 *ngIf="suspendedText.inactive==false" class="modal-title" id="modal-basic-title">Suspend</h5>
+    <h5 *ngIf="suspendedText.inactive==true" class="modal-title" id="modal-basic-title">Resume</h5>
+    <!-- <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button> -->
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="modal-body p-0">
+        <!-- <p>
+          User '' will be suspended and wouldn't be able to login. Do you wish
+          to continue?
+        </p> -->
+      <p class="sub-heading" *ngIf="suspendedText.inactive==false">User '{{suspendedText.userId}}' will be suspended and wouldn't be able to login. Do you wish
+        to continue?</p>
+      </div>
+      <!-- resume content -->
+      <div class="modal-body p-0">
+      <p class="sub-heading" *ngIf="suspendedText.inactive==true">User '{{suspendedText.userId}}' is suspended. This action will resume the user's login.</p>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <!-- <app-loader *ngIf="bLoading"></app-loader> -->
+    <button
+    type="button"
+    class="btn btn-outline-secondary"
+    (click)="c('Save click')"
+  >
+    Cancel
+  </button>
+    <button  type="button" class="btn btn-primary" (click)="UsersComponent_SuspendSelectedUser()">
+      Submit
+    </button>
+   
+  </div>
+</ng-template>
+<!--------------------------------------------------------------------->
+
+<!-------------------- Delete User Modal -------------------->
+<ng-template #deleteUser let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-basic-title">Delete</h5>
+    <!-- <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button> -->
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="modal-body p-0">
+        <p class="sub-heading">
+          This action will delete the user '{{sSelectedUserName}}' permanently from the
+          list. To suspend the user, use the 'Suspend' action. Do you wish to
+          continue?
+        </p>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <!-- <app-loader *ngIf="bLoading"></app-loader> -->
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="c('Save click')"
+    >
+      Cancel
+    </button>
+    <button
+
+      type="button"
+      class="btn btn-danger"
+      (click)="UsersComponent_DeleteSelectedUser()"
+    >
+      Delete
+    </button>
+    
+  </div>
+</ng-template>
+<!--------------------------------------------------------------------->
+
+

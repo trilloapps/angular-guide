@@ -3,6 +3,17 @@ export const environment =
   production: false,
   APP_NAME: 'SampleApp',
   Title: 'Sample App',
-  BaseURL: 'https://fe-wb-lab1.kdlabs.dev',
+  BaseURL: 'https://api.apps-demo-2.trilloapps.com',
   AccessToken :'lsSampleAppAccessToken',
+
+  firebaseConfig: {
+    apiKey: "AIzaSyBfrqkb624X9THB5LxM_cgJ695hbfpfSaQ",
+    authDomain: "apps-demo-2-402107.firebaseapp.com",
+    projectId: "apps-demo-2-402107",
+    storageBucket: "apps-demo-2-402107.appspot.com",
+    messagingSenderId: "719788448180",
+    appId: "1:719788448180:web:8d10f5123f237ac16e7ae1",
+    measurementId: "G-M5G0BPWW0M",
+    vapidKey: "BP7nIinCI9PedAuuEysl6bmWq-jrWeK0UZ6NK0F8E4KtUJ4B8oW98FxUHtaDWm7fQ_yECcc27RH6CNqh4AOruv0"
+  }
 };
