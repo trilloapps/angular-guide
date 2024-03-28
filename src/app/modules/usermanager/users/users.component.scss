@@ -1,0 +1,9 @@
+.users-table{
+    height: calc(100vh - 275px);
+    overflow: auto;
+}
+table thead{
+    position: sticky;
+    top: 0;
+    z-index: 11;
+}

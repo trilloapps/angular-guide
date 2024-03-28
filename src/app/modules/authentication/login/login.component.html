@@ -1,9 +1,8 @@
-<app-alert *ngIf="bDisplayErrorBlock" [resMessage]="resMessage"></app-alert>
+<app-alert *ngIf="DisplayErrorBlock" [resMessage]="resMessage"></app-alert>
 
 <div class='auth-bg'></div>
-<div class='auth-card shadow'>
+<div *ngIf="verificationSection" class='auth-card shadow'>
    <div class='login-logo mb-3'>Login</div>
-  <!-- <form> -->
     <form [formGroup]="loginForm" (ngSubmit)="sendLoginRequest()">
    <div class='form-group mb-3'>
      <label class='form-label'>
@@ -25,9 +24,16 @@
                 required</small>
    </div>
    <div class='form-group mb-3'>
-     <button class='btn btn-primary w-100' type="submit">Submit</button>
+     <button class='btn btn-primary w-100' type="submit" [disabled]="Loader">
+      <span *ngIf="!Loader">Submit</span>
+      <div *ngIf="Loader" class="spinner-border spinner-border-sm" role="status">
+        <span class="sr-only">Loading...</span>
+      </div></button>
     </div>
   </form>
-  <!-- </form> -->
- 
- </div>
+  <div class="text-center">
+    <span >Don't have an account? <a href="" class=" text-primary" routerLink="/auth/signUp">Signup</a> </span>
+</div>
+</div>
+<div class="d-flex justify-content-center" id="recaptcha-container-login"></div>
+ <app-phone-verification *ngIf="!verificationSection" [confirmationResult]="fireBaseConfirmationResult" [loginStatusResult]="loginStatusResult"></app-phone-verification>

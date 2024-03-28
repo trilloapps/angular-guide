@@ -15,4 +15,9 @@ export class AuthService {
     return this.http.post(environment.BaseURL+'/_preauthsvc/user/authenticate',credentials
 );
   }
+    // API For Login
+    AuthService_Signup(credentials:any): Observable<any> {
+      return this.http.post(environment.BaseURL+'/_preauthsvc/user/signup',credentials
+  );
+    }
 }
