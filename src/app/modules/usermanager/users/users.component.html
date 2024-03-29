@@ -104,6 +104,9 @@
                       nm="editUser"
                       (click)="UsersComponent_EditUser(item, edit)"
                     >
+                    <span>
+                      <i class="fa-solid fa-pen-to-square me-2"></i>
+                    </span>
                       Edit
                     </button>
                     <button
@@ -114,6 +117,9 @@
                       nm="resetPassword"
                       (click)="UsersComponent_ResetPasswordValue(item, resetpassword)"
                     >
+                    <span>
+                      <i class="fa-solid fa-key me-2"></i>
+                    </span>
                       Change Password
                     </button>
                     <button
@@ -123,6 +129,9 @@
                       nm="suspendUser"
                       (click)="UsersComponent_SuspendUserModal(item, suspend)"
                     >
+                    <span>
+                      <i class="fa-solid fa-power-off me-2"></i>
+                    </span>
                       <span>{{item.inactive===true?"Resume":"Suspend"}}</span>
                     </button>
                     <button
@@ -142,6 +151,9 @@
                       nm="deleteUser"
                       (click)="UsersComponent_DeleteUserModal(item, deleteUser)"
                     >
+                    <span>
+                      <i class="fa-solid fa-trash me-2"></i>
+                    </span>
                       <span>Delete</span>
                     </button>
                   </div>
