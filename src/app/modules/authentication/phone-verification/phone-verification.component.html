@@ -27,7 +27,7 @@
                   </form>
             <div class="text-center mt-4">
               <button
-                class="btn btn-primary" (click)="verifyToken()" [disabled]="Loader"
+                class="btn btn-primary w-100" (click)="verifyToken()" [disabled]="Loader"
               >
               <span *ngIf="!Loader">Submit Code</span>
                 <div *ngIf="Loader" class="spinner-border spinner-border-sm" role="status">

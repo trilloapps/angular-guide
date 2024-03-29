@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UsermanagerRoutes } from './usermanager.routing.module';
 import { UsersComponent } from './users/users.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
@@ -24,6 +24,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
     CommonModule,
     RouterModule.forChild(UsermanagerRoutes),
     NgbModule,
+    NgbDropdownModule,
     NgSelectModule,
     NgMultiSelectDropDownModule.forRoot(),
     SharedModule,
